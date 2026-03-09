@@ -27,21 +27,24 @@ class EstudianteController:
         finally:
             conn.close()
 
+
     def get_estudiante(self, estudiante_id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
+
             cursor.execute(
-                "SELECT * FROM estudiantes WHERE id=%s",
+                "SELECT * FROM estudiantes WHERE id_estudiante=%s",
                 (estudiante_id,)
             )
+
             result = cursor.fetchone()
 
             if not result:
                 raise HTTPException(status_code=404, detail="Estudiante no encontrado")
 
             content = {
-                "id": result[0],
+                "id_estudiante": result[0],
                 "nombre": result[1],
                 "documento": result[2],
                 "correo": result[3],
@@ -57,10 +60,12 @@ class EstudianteController:
         finally:
             conn.close()
 
+
     def get_estudiantes(self):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
+
             cursor.execute("SELECT * FROM estudiantes")
             result = cursor.fetchall()
 
@@ -68,9 +73,10 @@ class EstudianteController:
                 raise HTTPException(status_code=404, detail="No hay estudiantes")
 
             payload = []
+
             for data in result:
                 payload.append({
-                    "id": data[0],
+                    "id_estudiante": data[0],
                     "nombre": data[1],
                     "documento": data[2],
                     "correo": data[3],
@@ -86,18 +92,21 @@ class EstudianteController:
         finally:
             conn.close()
 
+
     def update_estudiante(self, estudiante_id: int, estudiante: Estudiante):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
+
             cursor.execute(
                 """UPDATE estudiantes 
                 SET nombre=%s, documento=%s, correo=%s, telefono=%s, programa_id=%s
-                WHERE id=%s""",
+                WHERE id_estudiante=%s""",
                 (estudiante.nombre, estudiante.documento,
                  estudiante.correo, estudiante.telefono,
                  estudiante.programa_id, estudiante_id)
             )
+
             conn.commit()
 
             if cursor.rowcount == 0:
@@ -111,14 +120,17 @@ class EstudianteController:
         finally:
             conn.close()
 
+
     def delete_estudiante(self, estudiante_id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
+
             cursor.execute(
-                "DELETE FROM estudiantes WHERE id=%s",
+                "DELETE FROM estudiantes WHERE id_estudiante=%s",
                 (estudiante_id,)
             )
+
             conn.commit()
 
             if cursor.rowcount == 0:

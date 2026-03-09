@@ -2,9 +2,9 @@ from pydantic import BaseModel
 from typing import Optional
 
 class Estudiante(BaseModel):
-    id: Optional[int] = None
+    id_estudiante: Optional[int] = None
     nombre: str
     documento: str
     correo: str
     telefono: Optional[str] = None
-    programa_id: Optional[int]
+    programa_id: Optional[int] = None

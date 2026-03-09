@@ -1,15 +1,15 @@
 from fastapi import FastAPI
 from routes.estudiante_routes import router as estudiante_router
-from routes.documento_routes import router as documento_router
-from routes.estudiantedocumento_routes import router as estudiantedocumento_router
-from routes.facultad_routes import router as facultad_router
-from routes.jurado_routes import router as jurado_router
-from routes.pagogrado_routes import router as pagogrado_router
+from app.routes.documento_requerido_routes import router as documento_router
+from app.routes.entrega_documento_routes import router as entrega_documentos_router
+from app.routes.facultades_routes import router as facultad_router
 from routes.programa_routes import router as programa_router
-from routes.requisitogrado_routes import router as requisitogrado_router
-from routes.sustentacion_routes import router as sustentancion_router
-from routes.tramite_routes import router as tramite_router
-from routes.tramiterequisito_routes import router as tramiterequisito_router
+from app.routes.pago_tramite_routes import router as pago_router
+from app.routes.paz_ysalvo_routes import router as paz_ysalvo_router
+from app.routes.tipos_degrado_routes import router as tipos_degrado_router
+from app.routes.ceremonia_grado_routes import router as ceremonia_router
+from app.routes.asignacion_ceremonia_routes import router as asignacion_ceremonia_router
+from app.routes.tramite_grado_routes import router as tramite_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -35,15 +35,20 @@ app.add_middleware(
 
 app.include_router(documento_router)
 app.include_router(estudiante_router)
-app.include_router(estudiantedocumento_router)
+app.include_router(entrega_documentos_router)
 app.include_router(facultad_router)
-app.include_router(jurado_router)
-app.include_router(pagogrado_router)
+app.include_router(pago_router)
+app.include_router(paz_ysalvo_router)
+app.include_router(tipos_degrado_router)
 app.include_router(programa_router)
-app.include_router(requisitogrado_router)
-app.include_router(sustentancion_router)
+app.include_router(ceremonia_router)
+app.include_router(asignacion_ceremonia_router)
 app.include_router(tramite_router)
-app.include_router(tramiterequisito_router)
+
+
+@app.get("/")
+def root():
+    return {"mensaje": "API funcionando"}
 
 if __name__ == "__main__":
     import uvicorn
