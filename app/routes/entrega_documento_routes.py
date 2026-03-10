@@ -1,32 +1,32 @@
 from fastapi import APIRouter
-from controllers.entrega_documento_controller import *
-from models.entrega_documento_model import EntregaDocumento
+from app.controllers.entrega_documento_controller import EntregaDocumentosController
+from app.models.entrega_documento_model import EntregaDocumento
 
 router = APIRouter()
 
-nueva_entrega_documento = EntregaDocumentoController()
+controller = EntregaDocumentosController()
 
 
-@router.post("/create_entrega_documento")
-async def create_entrega_documento(entrega_documento: EntregaDocumento):
-    return nueva_entrega_documento.create_entrega_documento(entrega_documento)
+@router.post("/entregas_documentos")
+def crear_entrega(entrega: EntregaDocumento):
+    return controller.create_entrega(entrega)
 
 
-@router.get("/get_entrega_documento/{entrega_documento_id}", response_model=EntregaDocumento)
-async def get_entrega_documento(entrega_documento_id: int):
-    return nueva_entrega_documento.get_entrega_documento(entrega_documento_id)
+@router.get("/entregas_documentos")
+def listar_entregas():
+    return controller.get_entregas()
 
 
-@router.get("/get_entregas_documento/")
-async def get_entregas_documento():
-    return nueva_entrega_documento.get_entregas_documento()
+@router.get("/entregas_documentos/{id_entrega}")
+def obtener_entrega(id_entrega: int):
+    return controller.get_entrega(id_entrega)
 
 
-@router.put("/update_entrega_documento/{entrega_documento_id}")
-async def update_entrega_documento(entrega_documento_id: int, entrega_documento: EntregaDocumento):
-    return nueva_entrega_documento.update_entrega_documento(entrega_documento_id, entrega_documento)
+@router.put("/entregas_documentos/{id_entrega}")
+def actualizar_entrega(id_entrega: int, entrega: EntregaDocumento):
+    return controller.update_entrega(id_entrega, entrega)
 
 
-@router.delete("/delete_entrega_documento/{entrega_documento_id}")
-async def delete_entrega_documento(entrega_documento_id: int):
-    return nueva_entrega_documento.delete_entrega_documento(entrega_documento_id)
+@router.delete("/entregas_documentos/{id_entrega}")
+def eliminar_entrega(id_entrega: int):
+    return controller.delete_entrega(id_entrega)

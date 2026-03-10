@@ -1,32 +1,32 @@
 from fastapi import APIRouter
-from controllers.asignacion_ceremonia_controller import *
-from models.asignacion_ceremonia_model import AsignacionCeremonia
+from app.controllers.asignacion_ceremonia_controller import AsignacionCeremoniaController
+from app.models.asignacion_ceremonia_model import AsignacionCeremonia
 
 router = APIRouter()
 
-nueva_asignacion_ceremonia = AsignacionCeremoniaController()
+controller = AsignacionCeremoniaController()
 
 
-@router.post("/create_asignacion_ceremonia")
-async def create_asignacion_ceremonia(asignacion_ceremonia: AsignacionCeremonia):
-    return nueva_asignacion_ceremonia.create_asignacion_ceremonia(asignacion_ceremonia)
+@router.post("/asignaciones")
+def crear_asignacion(asignacion: AsignacionCeremonia):
+    return controller.create_asignacion(asignacion)
 
 
-@router.get("/get_asignacion_ceremonia/{asignacion_ceremonia_id}", response_model=AsignacionCeremonia)
-async def get_asignacion_ceremonia(asignacion_ceremonia_id: int):
-    return nueva_asignacion_ceremonia.get_asignacion_ceremonia(asignacion_ceremonia_id)
+@router.get("/asignaciones")
+def listar_asignaciones():
+    return controller.get_asignaciones()
 
 
-@router.get("/get_asignaciones_ceremonia/")
-async def get_asignaciones_ceremonia():
-    return nueva_asignacion_ceremonia.get_asignaciones_ceremonia()
+@router.get("/asignaciones/{id_asignacion}")
+def obtener_asignacion(id_asignacion: int):
+    return controller.get_asignacion(id_asignacion)
 
 
-@router.put("/update_asignacion_ceremonia/{asignacion_ceremonia_id}")
-async def update_asignacion_ceremonia(asignacion_ceremonia_id: int, asignacion_ceremonia: AsignacionCeremonia):
-    return nueva_asignacion_ceremonia.update_asignacion_ceremonia(asignacion_ceremonia_id, asignacion_ceremonia)
+@router.put("/asignaciones/{id_asignacion}")
+def actualizar_asignacion(id_asignacion: int, asignacion: AsignacionCeremonia):
+    return controller.update_asignacion(id_asignacion, asignacion)
 
 
-@router.delete("/delete_asignacion_ceremonia/{asignacion_ceremonia_id}")
-async def delete_asignacion_ceremonia(asignacion_ceremonia_id: int):
-    return nueva_asignacion_ceremonia.delete_asignacion_ceremonia(asignacion_ceremonia_id)
+@router.delete("/asignaciones/{id_asignacion}")
+def eliminar_asignacion(id_asignacion: int):
+    return controller.delete_asignacion(id_asignacion)

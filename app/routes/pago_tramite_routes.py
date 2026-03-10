@@ -1,32 +1,32 @@
 from fastapi import APIRouter
-from controllers.pago_tramite_controller import *
-from models.pago_tramite_model import PagoTramite
+from app.controllers.pago_tramite_controller import PagoTramiteController
+from app.models.pago_tramite_model import PagoTramite
 
 router = APIRouter()
 
-nuevo_pago_tramite = PagoTramiteController()
+controller = PagoTramiteController()
 
 
-@router.post("/create_pago_tramite")
-async def create_pago_tramite(pago_tramite: PagoTramite):
-    return nuevo_pago_tramite.create_pago_tramite(pago_tramite)
+@router.post("/pagos_tramite")
+def crear_pago(pago: PagoTramite):
+    return controller.create_pago(pago)
 
 
-@router.get("/get_pago_tramite/{pago_tramite_id}", response_model=PagoTramite)
-async def get_pago_tramite(pago_tramite_id: int):
-    return nuevo_pago_tramite.get_pago_tramite(pago_tramite_id)
+@router.get("/pagos_tramite")
+def listar_pagos():
+    return controller.get_pagos()
 
 
-@router.get("/get_pagos_tramite/")
-async def get_pagos_tramite():
-    return nuevo_pago_tramite.get_pagos_tramite()
+@router.get("/pagos_tramite/{id_pago}")
+def obtener_pago(id_pago: int):
+    return controller.get_pago(id_pago)
 
 
-@router.put("/update_pago_tramite/{pago_tramite_id}")
-async def update_pago_tramite(pago_tramite_id: int, pago_tramite: PagoTramite):
-    return nuevo_pago_tramite.update_pago_tramite(pago_tramite_id, pago_tramite)
+@router.put("/pagos_tramite/{id_pago}")
+def actualizar_pago(id_pago: int, pago: PagoTramite):
+    return controller.update_pago(id_pago, pago)
 
 
-@router.delete("/delete_pago_tramite/{pago_tramite_id}")
-async def delete_pago_tramite(pago_tramite_id: int):
-    return nuevo_pago_tramite.delete_pago_tramite(pago_tramite_id)
+@router.delete("/pagos_tramite/{id_pago}")
+def eliminar_pago(id_pago: int):
+    return controller.delete_pago(id_pago)

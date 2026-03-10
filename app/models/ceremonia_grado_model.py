@@ -1,11 +1,9 @@
 from pydantic import BaseModel
 from typing import Optional
-from datetime import date, time
+from datetime import datetime
 
 class CeremoniaGrado(BaseModel):
-    id_ceremonia_grado: Optional[int] = None
-    nombre: Optional[str] = None
-    fecha: date
-    lugar: Optional[str] = None
-    horario: Optional[time] = None
-    capacidad: Optional[int] = None
+    id_ceremonia: Optional[int] = None
+    fecha: datetime
+    lugar: str
+    descripcion: Optional[str] = None
