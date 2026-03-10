@@ -1,119 +1,171 @@
 import psycopg2
 from fastapi import HTTPException
 from config.db_config import get_db_connection
-from models.documento_model import Documento
+from models.documento_requerido_model import DocumentoRequerido
 from fastapi.encoders import jsonable_encoder
 
 
-class DocumentoController:
+class DocumentoRequeridoController:
 
-    def create_documento(self, documento: Documento):
+    def create_documento_requerido(self, data: DocumentoRequerido):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
+
             cursor.execute(
-                "INSERT INTO documentos (nombre, obligatorio) VALUES (%s, %s)",
-                (documento.nombre, documento.obligatorio)
+                """INSERT INTO documento_requerido
+                (nombre, descripcion, id_tipo_grado)
+                VALUES (%s,%s,%s)""",
+                (
+                    data.nombre,
+                    data.descripcion,
+                    data.id_tipo_grado
+                )
             )
+
             conn.commit()
-            return {"resultado": "Documento creado"}
+            return {"resultado": "Documento requerido creado"}
+
         except psycopg2.Error as err:
             print(err)
             conn.rollback()
+
         finally:
             conn.close()
 
-    def get_documento(self, documento_id: int):
+
+    def get_documento_requerido(self, id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
+
             cursor.execute(
-                "SELECT * FROM documentos WHERE id=%s",
-                (documento_id,)
+                """SELECT
+                id_documento_requerido,
+                nombre,
+                descripcion,
+                id_tipo_grado
+                FROM documento_requerido
+                WHERE id_documento_requerido=%s""",
+                (id,)
             )
+
             result = cursor.fetchone()
 
             if not result:
-                raise HTTPException(status_code=404, detail="Documento no encontrado")
+                raise HTTPException(status_code=404, detail="Documento requerido no encontrado")
 
             content = {
-                "id": result[0],
+                "id_documento_requerido": result[0],
                 "nombre": result[1],
-                "obligatorio": result[2]
+                "descripcion": result[2],
+                "id_tipo_grado": result[3]
             }
 
             return jsonable_encoder(content)
 
-        except psycopg2.Error as err:
-            print(err)
-            conn.rollback()
         finally:
             conn.close()
 
-    def get_documentos(self):
+
+    def get_documentos_requeridos(self):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM documentos")
+
+            cursor.execute(
+                """SELECT
+                id_documento_requerido,
+                nombre,
+                descripcion,
+                id_tipo_grado
+                FROM documento_requerido"""
+            )
+
             result = cursor.fetchall()
 
-            if not result:
-                raise HTTPException(status_code=404, detail="No hay documentos")
-
             payload = []
+
             for data in result:
-                payload.append({
-                    "id": data[0],
+                content = {
+                    "id_documento_requerido": data[0],
                     "nombre": data[1],
-                    "obligatorio": data[2]
-                })
+                    "descripcion": data[2],
+                    "id_tipo_grado": data[3]
+                }
 
-            return {"resultado": jsonable_encoder(payload)}
+                payload.append(content)
+
+            json_data = jsonable_encoder(payload)
+
+            if result:
+                return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="No hay documentos requeridos")
 
         except psycopg2.Error as err:
             print(err)
             conn.rollback()
+
         finally:
             conn.close()
 
-    def update_documento(self, documento_id: int, documento: Documento):
+
+    def update_documento_requerido(self, id: int, data: DocumentoRequerido):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
+
             cursor.execute(
-                "UPDATE documentos SET nombre=%s, obligatorio=%s WHERE id=%s",
-                (documento.nombre, documento.obligatorio, documento_id)
+                """UPDATE documento_requerido
+                SET nombre=%s,
+                    descripcion=%s,
+                    id_tipo_grado=%s
+                WHERE id_documento_requerido=%s""",
+                (
+                    data.nombre,
+                    data.descripcion,
+                    data.id_tipo_grado,
+                    id
+                )
             )
+
             conn.commit()
 
             if cursor.rowcount == 0:
-                raise HTTPException(status_code=404, detail="Documento no encontrado")
+                raise HTTPException(status_code=404, detail="Documento requerido no encontrado")
 
-            return {"resultado": "Documento actualizado"}
+            return {"resultado": "Documento requerido actualizado"}
 
         except psycopg2.Error as err:
             print(err)
             conn.rollback()
+
         finally:
             conn.close()
 
-    def delete_documento(self, documento_id: int):
+
+    def delete_documento_requerido(self, id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
+
             cursor.execute(
-                "DELETE FROM documentos WHERE id=%s",
-                (documento_id,)
+                """DELETE FROM documento_requerido
+                WHERE id_documento_requerido=%s""",
+                (id,)
             )
+
             conn.commit()
 
             if cursor.rowcount == 0:
-                raise HTTPException(status_code=404, detail="Documento no encontrado")
+                raise HTTPException(status_code=404, detail="Documento requerido no encontrado")
 
-            return {"resultado": "Documento eliminado"}
+            return {"resultado": "Documento requerido eliminado"}
 
         except psycopg2.Error as err:
             print(err)
             conn.rollback()
+
         finally:
             conn.close()

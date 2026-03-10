@@ -7,13 +7,14 @@ from fastapi.encoders import jsonable_encoder
 
 class FacultadController:
 
-    def create_facultad(self, facultad: Facultad):
+    def create_facultad(self, data: Facultad):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO facultades (nombre) VALUES (%s)",
-                (facultad.nombre,)
+                """INSERT INTO facultad (nombre)
+                VALUES (%s)""",
+                (data.nombre,)
             )
             conn.commit()
             return {"resultado": "Facultad creada"}
@@ -23,29 +24,27 @@ class FacultadController:
         finally:
             conn.close()
 
-    def get_facultad(self, facultad_id: int):
+    def get_facultad(self, id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM facultades WHERE id = %s",
-                (facultad_id,)
+                "SELECT * FROM facultad WHERE id_facultad=%s",
+                (id,)
             )
+
             result = cursor.fetchone()
 
             if not result:
                 raise HTTPException(status_code=404, detail="Facultad no encontrada")
 
             content = {
-                "id": result[0],
+                "id_facultad": result[0],
                 "nombre": result[1]
             }
 
             return jsonable_encoder(content)
 
-        except psycopg2.Error as err:
-            print(err)
-            conn.rollback()
         finally:
             conn.close()
 
@@ -53,35 +52,38 @@ class FacultadController:
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
-            cursor.execute("SELECT * FROM facultades")
-            result = cursor.fetchall()
+            cursor.execute("SELECT * FROM facultad")
 
-            if not result:
+            result = cursor.fetchall()
+            payload = []
+
+            for data in result:
+                content = {
+                    "id_facultad": data[0],
+                    "nombre": data[1]
+                }
+                payload.append(content)
+
+            if result:
+                return {"resultado": jsonable_encoder(payload)}
+            else:
                 raise HTTPException(status_code=404, detail="No hay facultades")
 
-            payload = []
-            for data in result:
-                payload.append({
-                    "id": data[0],
-                    "nombre": data[1]
-                })
-
-            return {"resultado": jsonable_encoder(payload)}
-
-        except psycopg2.Error as err:
-            print(err)
-            conn.rollback()
         finally:
             conn.close()
 
-    def update_facultad(self, facultad_id: int, facultad: Facultad):
+    def update_facultad(self, id: int, data: Facultad):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
+
             cursor.execute(
-                "UPDATE facultades SET nombre=%s WHERE id=%s",
-                (facultad.nombre, facultad_id)
+                """UPDATE facultad
+                SET nombre=%s
+                WHERE id_facultad=%s""",
+                (data.nombre, id)
             )
+
             conn.commit()
 
             if cursor.rowcount == 0:
@@ -89,20 +91,19 @@ class FacultadController:
 
             return {"resultado": "Facultad actualizada"}
 
-        except psycopg2.Error as err:
-            print(err)
-            conn.rollback()
         finally:
             conn.close()
 
-    def delete_facultad(self, facultad_id: int):
+    def delete_facultad(self, id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
+
             cursor.execute(
-                "DELETE FROM facultades WHERE id=%s",
-                (facultad_id,)
+                "DELETE FROM facultad WHERE id_facultad=%s",
+                (id,)
             )
+
             conn.commit()
 
             if cursor.rowcount == 0:
@@ -110,8 +111,5 @@ class FacultadController:
 
             return {"resultado": "Facultad eliminada"}
 
-        except psycopg2.Error as err:
-            print(err)
-            conn.rollback()
         finally:
             conn.close()
