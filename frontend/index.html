@@ -1,22 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 
-<title>Login</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Login - Trámites de Grado</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
 
-<h1>Sistema de Tramites de Grado</h1>
+<div class="login-card">
 
-<div class="login">
+    <h3 class="titulo">Sistema de Trámites</h3>
+    <p class="subtitulo">Ingreso al sistema</p>
 
-<input id="correo" placeholder="Correo">
-<input id="password" type="password" placeholder="Contraseña">
+    <input id="correo" type="email" placeholder="Correo">
+    <input id="password" type="password" placeholder="Contraseña">
 
-<button onclick="login()">Ingresar</button>
+    <button onclick="login()">Ingresar</button>
+
+    <div class="links">
+        <a href="olvidoContra.html">¿Olvidaste tu contraseña?</a>
+        <p>¿No tienes cuenta? <a href="crearCuenta.html">Crear cuenta</a></p>
+    </div>
 
 </div>
 
