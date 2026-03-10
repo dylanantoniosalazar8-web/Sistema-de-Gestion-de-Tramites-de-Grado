@@ -3,13 +3,13 @@ from routes.estudiante_routes import router as estudiante_router
 from app.routes.documento_requerido_routes import router as documento_router
 from app.routes.entrega_documento_routes import router as entrega_documentos_router
 from app.routes.facultades_routes import router as facultad_router
-from routes.programa_routes import router as programa_router
+from app.routes.programas_routes import router as programa_router
 from app.routes.pago_tramite_routes import router as pago_router
 from app.routes.paz_ysalvo_routes import router as paz_ysalvo_router
 from app.routes.tipos_degrado_routes import router as tipos_degrado_router
 from app.routes.ceremonia_grado_routes import router as ceremonia_router
 from app.routes.asignacion_ceremonia_routes import router as asignacion_ceremonia_router
-from app.routes.tramite_grado_routes import router as tramite_router
+from app.routes.tipo_documento_routes import router as tipo_documento_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -43,7 +43,7 @@ app.include_router(tipos_degrado_router)
 app.include_router(programa_router)
 app.include_router(ceremonia_router)
 app.include_router(asignacion_ceremonia_router)
-app.include_router(tramite_router)
+app.include_router(tipo_documento_router)
 
 
 @app.get("/")
