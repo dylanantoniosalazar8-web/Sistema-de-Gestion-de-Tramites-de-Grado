@@ -1,0 +1,172 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f2f5;
+  color: #1a1a2e;
+  display: block;
+  padding: 0;
+}
+
+/* NAVBAR */
+.navbar {
+  background: #1a1a2e;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+}
+
+.navbar h1 { font-size: 1.2rem; }
+
+/* CONTENIDO */
+.contenido {
+  padding: 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+h2 { font-size: 1.3rem; margin: 24px 0 12px; color: #1a1a2e; }
+
+/* BOTONES */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-right: 8px;
+  background: #1a1a2e;
+  color: white;
+  width: auto;
+}
+
+button:hover { background: #e94560; }
+
+/* FORMULARIO */
+#formNuevo {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  margin: 16px 0;
+  max-width: 420px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+#formNuevo label {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+#formNuevo input, #formNuevo select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+/* LOGIN */
+.login {
+  background: white;
+  padding: 40px;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  text-align: center;
+  margin: 80px auto;
+}
+
+.login h1 { margin-bottom: 24px; font-size: 1.5rem; }
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+/* TABLA */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  margin-top: 12px;
+}
+
+thead th {
+  background: #1a1a2e;
+  color: white;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.9rem;
+}
+
+tbody tr:hover { background: #f9f9f9; }
+tbody tr:last-child td { border-bottom: none; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .contenido { padding: 16px; }
+  .navbar { padding: 12px 16px; }
+  table { font-size: 0.8rem; }
+}
+body {
+  display: block;
+  padding: 20px;
+}
+
+h1, h2, h3, p, button, hr, div {
+  display: block;
+}
+
+h1 { font-size: 1.8rem; margin-bottom: 10px; }
+h2 { font-size: 1.3rem; margin: 20px 0 10px; }
+
+button {
+  width: auto;
+  margin: 5px;
+  padding: 10px 20px;
+}
+
+#formNuevo {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 15px 0;
+  max-width: 400px;
+}
+
+#formNuevo label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+#formNuevo input, #formNuevo select {
+  width: 100%;
+  margin-top: 5px;
+}
+
+table {
+  margin-top: 15px;
+}

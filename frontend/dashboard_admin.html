@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Panel Administrador</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="navbar">
+  <h1>Sistema de Trámites de Grado</h1>
+  <div>
+    <span id="bienvenida" style="margin-right:16px;font-size:0.9rem;color:white"></span>
+    <button onclick="logout()">Cerrar Sesión</button>
+  </div>
+</div>
+
+<div class="contenido">
+  <h2>Trámites de Grado</h2>
+  <button onclick="cargarTramites()">Ver Trámites</button>
+  <button onclick="abrirFormNuevo()">+ Nuevo Trámite</button>
+
+  <div id="formNuevo" style="display:none; margin:10px 0">
+    <h3>Nuevo Trámite</h3>
+    <label>ID Estudiante: <input type="number" id="nuevoEstudiante"></label><br><br>
+    <label>ID Tipo Grado: <input type="number" id="nuevoTipoGrado"></label><br><br>
+    <label>Fecha Inicio: <input type="date" id="nuevoFecha"></label><br><br>
+    <label>Estado:
+      <select id="nuevoEstado">
+        <option value="En Proceso">En Proceso</option>
+        <option value="Aprobado">Aprobado</option>
+        <option value="Rechazado">Rechazado</option>
+        <option value="Finalizado">Finalizado</option>
+      </select>
+    </label><br><br>
+    <button onclick="crearTramite()">Guardar</button>
+    <button onclick="cerrarForm()">Cancelar</button>
+  </div>
+
+  <div id="tabla"></div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
