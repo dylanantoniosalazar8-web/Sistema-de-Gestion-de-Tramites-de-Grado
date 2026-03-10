@@ -1,145 +1,189 @@
 import psycopg2
 from fastapi import HTTPException
-from fastapi.encoders import jsonable_encoder
-from app.models.tipos_degrado_model import TipoGrado
 from config.db_config import get_db_connection
+from models.tramite_grado_model import TramiteGrado
+from fastapi.encoders import jsonable_encoder
 
 
-class TipoGradoController:
+class TramiteGradoController:
 
-    def create_tipo_grado(self, tipo_grado: TipoGrado):
+    def create_tramite_grado(self, data: TramiteGrado):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
 
             cursor.execute(
-                """INSERT INTO tipo_grado
-                (nombre, descripcion)
-                VALUES (%s,%s)""",
-                (tipo_grado.nombre, tipo_grado.descripcion)
+                """INSERT INTO tramite_grado
+                (id_estudiante, id_tipo_grado, fecha_inicio, fecha_fin, estado)
+                VALUES (%s,%s,%s,%s,%s)""",
+                (
+                    data.id_estudiante,
+                    data.id_tipo_grado,
+                    data.fecha_inicio,
+                    data.fecha_fin,
+                    data.estado
+                )
             )
 
             conn.commit()
-            return {"resultado": "Tipo de grado creado"}
+            return {"resultado": "Trámite de grado registrado"}
 
         except psycopg2.Error as err:
             print(err)
             conn.rollback()
+            raise HTTPException(status_code=500, detail="Error al registrar el trámite")
 
         finally:
             conn.close()
 
 
-    def get_tipo_grado(self, id_tipo_grado: int):
+    def get_tramite_grado(self, id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
 
             cursor.execute(
-                "SELECT * FROM tipo_grado WHERE id_tipo_grado=%s",
-                (id_tipo_grado,)
+                """SELECT
+                id_tramite_grado,
+                id_estudiante,
+                id_tipo_grado,
+                fecha_inicio,
+                fecha_fin,
+                estado
+                FROM tramite_grado
+                WHERE id_tramite_grado=%s""",
+                (id,)
             )
 
             result = cursor.fetchone()
 
             if not result:
-                raise HTTPException(status_code=404, detail="Tipo de grado no encontrado")
+                raise HTTPException(status_code=404, detail="Trámite de grado no encontrado")
 
             content = {
-                "id_tipo_grado": result[0],
-                "nombre": result[1],
-                "descripcion": result[2]
+                "id_tramite_grado": result[0],
+                "id_estudiante": result[1],
+                "id_tipo_grado": result[2],
+                "fecha_inicio": result[3],
+                "fecha_fin": result[4],
+                "estado": result[5]
             }
 
             return jsonable_encoder(content)
-
-        except psycopg2.Error as err:
-            print(err)
-            conn.rollback()
 
         finally:
             conn.close()
 
 
-    def get_tipos_grado(self):
+    def get_tramites_grado(self):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
 
-            cursor.execute("SELECT * FROM tipo_grado")
+            cursor.execute(
+                """SELECT
+                id_tramite_grado,
+                id_estudiante,
+                id_tipo_grado,
+                fecha_inicio,
+                fecha_fin,
+                estado
+                FROM tramite_grado"""
+            )
 
             result = cursor.fetchall()
 
             payload = []
 
             for data in result:
-                payload.append({
-                    "id_tipo_grado": data[0],
-                    "nombre": data[1],
-                    "descripcion": data[2]
-                })
+                content = {
+                    "id_tramite_grado": data[0],
+                    "id_estudiante": data[1],
+                    "id_tipo_grado": data[2],
+                    "fecha_inicio": data[3],
+                    "fecha_fin": data[4],
+                    "estado": data[5]
+                }
 
-            return {"resultado": jsonable_encoder(payload)}
+                payload.append(content)
+
+            json_data = jsonable_encoder(payload)
+
+            if result:
+                return {"resultado": json_data}
+            else:
+                raise HTTPException(status_code=404, detail="No hay trámites de grado registrados")
 
         except psycopg2.Error as err:
             print(err)
             conn.rollback()
+            raise HTTPException(status_code=500, detail="Error al obtener los trámites")
 
         finally:
             conn.close()
 
 
-    def update_tipo_grado(self, id_tipo_grado: int, tipo_grado: TipoGrado):
+    def update_tramite_grado(self, id: int, data: TramiteGrado):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
 
             cursor.execute(
-                """UPDATE tipo_grado
-                SET nombre=%s, descripcion=%s
-                WHERE id_tipo_grado=%s""",
+                """UPDATE tramite_grado
+                SET id_estudiante=%s,
+                    id_tipo_grado=%s,
+                    fecha_inicio=%s,
+                    fecha_fin=%s,
+                    estado=%s
+                WHERE id_tramite_grado=%s""",
                 (
-                    tipo_grado.nombre,
-                    tipo_grado.descripcion,
-                    id_tipo_grado
+                    data.id_estudiante,
+                    data.id_tipo_grado,
+                    data.fecha_inicio,
+                    data.fecha_fin,
+                    data.estado,
+                    id
                 )
             )
 
             conn.commit()
 
             if cursor.rowcount == 0:
-                raise HTTPException(status_code=404, detail="Tipo de grado no encontrado")
+                raise HTTPException(status_code=404, detail="Trámite de grado no encontrado")
 
-            return {"resultado": "Tipo de grado actualizado"}
+            return {"resultado": "Trámite de grado actualizado"}
 
         except psycopg2.Error as err:
             print(err)
             conn.rollback()
+            raise HTTPException(status_code=500, detail="Error al actualizar el trámite")
 
         finally:
             conn.close()
 
 
-    def delete_tipo_grado(self, id_tipo_grado: int):
+    def delete_tramite_grado(self, id: int):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
 
             cursor.execute(
-                "DELETE FROM tipo_grado WHERE id_tipo_grado=%s",
-                (id_tipo_grado,)
+                """DELETE FROM tramite_grado
+                WHERE id_tramite_grado=%s""",
+                (id,)
             )
 
             conn.commit()
 
             if cursor.rowcount == 0:
-                raise HTTPException(status_code=404, detail="Tipo de grado no encontrado")
+                raise HTTPException(status_code=404, detail="Trámite de grado no encontrado")
 
-            return {"resultado": "Tipo de grado eliminado"}
+            return {"resultado": "Trámite de grado eliminado"}
 
         except psycopg2.Error as err:
             print(err)
             conn.rollback()
+            raise HTTPException(status_code=500, detail="Error al eliminar el trámite")
 
         finally:
             conn.close()

@@ -71,7 +71,7 @@ class PazYSalvoController:
             conn.close()
 
 
-    def get_paz_ysalvos(self):
+    def get_pazes_ysalvo(self):
         try:
             conn = get_db_connection()
             cursor = conn.cursor()
